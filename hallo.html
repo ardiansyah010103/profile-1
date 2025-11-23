@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — I Love You</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#0f172a}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f8fafc}
+
+    /* Card (login) */
+    .card{width:360px;background:#fff;padding:28px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.08);text-align:center}
+    h1{margin:0 0 14px;font-size:20px}
+    p.lead{margin:0 0 18px;color:#475569;font-size:14px}
+    .field{display:flex;flex-direction:column;align-items:stretch;margin-bottom:12px}
+    label{font-size:13px;color:#64748b;margin-bottom:6px;text-align:left}
+    input{padding:10px 12px;border:1px solid #e6edf3;border-radius:10px;font-size:15px}
+    button{margin-top:8px;padding:10px 12px;border-radius:10px;border:0;background:#ef476f;color:white;font-weight:700;cursor:pointer}
+    .muted{font-size:12px;color:#94a3b8;margin-top:10px}
+
+    /* Page after login */
+    .page-love{display:none;min-height:60vh;width:100%;max-width:900px;border-radius:14px;overflow:hidden}
+    .love-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;text-align:center}
+    .love-inner h2{font-size:36px;margin:0 0 8px}
+    .love-inner p{margin:0;font-size:18px;color:#4c1d6d}
+
+    /* Pink theme */
+    .pink-bg{background:linear-gradient(135deg,#ffd6e0,#ffb3d4);color:#5b1033}
+
+    /* small responsive tweaks */
+    @media (max-width:420px){.card{width:92vw;padding:20px}.love-inner h2{font-size:28px}}
+  </style>
+</head>
+<body>
+  <!-- LOGIN CARD -->
+  <main class="card" id="loginCard" aria-labelledby="title">
+    <h1 id="title">Masuk</h1>
+    <p class="lead">Masukkan nama lengkapmu, lalu klik <strong>Masuk</strong>.</p>
+
+    <div class="field">
+      <label for="fullname">Nama Lengkap</label>
+      <input id="fullname" type="text" placeholder="Contoh: Siti Aminah" autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="enterBtn">Tombol</label>
+      <button id="enterBtn">Masuk</button>
+    </div>
+
+    <div class="muted">Data tidak disimpan — ini hanya demo lokal.</div>
+  </main>
+
+  <!-- PINK PAGE (hidden initially) -->
+  <section class="page-love pink-bg" id="lovePage" role="region" aria-hidden="true">
+    <div class="love-inner">
+      <h2 id="loveText">I Love You</h2>
+      <p id="nameText">(nama)</p>
+    </div>
+  </section>
+
+  <script>
+    const enterBtn = document.getElementById('enterBtn');
+    const fullNameInput = document.getElementById('fullname');
+    const loginCard = document.getElementById('loginCard');
+    const lovePage = document.getElementById('lovePage');
+    const loveText = document.getElementById('loveText');
+    const nameText = document.getElementById('nameText');
+
+    function showLovePage(name) {
+      // set text
+      loveText.textContent = 'I Love You';
+      nameText.textContent = name ? name : '';
+
+      // hide login card and show pink page
+      loginCard.style.display = 'none';
+      lovePage.style.display = 'block';
+      lovePage.setAttribute('aria-hidden', 'false');
+
+      // expand to center of viewport
+      lovePage.style.maxWidth = '720px';
+
+      // animate simple fade-in
+      lovePage.animate([
+        { opacity: 0, transform: 'scale(0.98)' },
+        { opacity: 1, transform: 'scale(1)' }
+      ], { duration: 420, easing: 'ease-out' });
+    }
+
+    enterBtn.addEventListener('click', () => {
+      const name = fullNameInput.value.trim();
+      if (!name) {
+        alert('Silakan masukkan nama lengkapmu dulu.');
+        fullNameInput.focus();
+        return;
+      }
+      // optional: encode name to avoid basic injection in textContent (we use textContent so it's safe)
+      showLovePage(name);
+    });
+
+    // allow pressing Enter key inside the name field
+    fullNameInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') enterBtn.click();
+    });
+  </script>
+</body>
+</html>
